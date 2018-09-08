@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    role: locust-master
+  name: locust-master
+spec:
+  type: LoadBalancer
+  selector:
+    role: locust-master
+  ports:
+    - port: 8089
+      protocol: TCP
+      name: master-web
+    - port: 5557
+      protocol: TCP
+      name: master-port1
+    - port: 5558
+      protocol: TCP
+      name: master-port2
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+  labels:
+    role: locust-master
+  name: locust-master
+spec:
+  selector:
+    matchLabels:
+      role: locust-master
+  template:
+    metadata:
+      labels:
+        role: locust-master
+    spec:
+      volumes:
+      - name: locustd-volume
+        configMap:
+          name: locustd-configmap
+      containers:
+        - name: locust
+          image: heehouse1/locust:0.9.6
+          env:
+            - name: LOCUST_MODE
+              value: master
+            - name: LOCUST_LOCUSTFILE_PATH
+              value: "/locust-tasks/locustfile.py"
+            - name: LOCUST_TARGET_HOST
+              value: "http://169.56.73.171:80"
+          volumeMounts:
+          - name: locustd-volume
+            mountPath: /locust-tasks
+          ports:
+            - containerPort: 8089
+            - containerPort: 5557
+            - containerPort: 5558
