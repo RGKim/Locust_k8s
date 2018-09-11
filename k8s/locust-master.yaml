@@ -42,14 +42,14 @@ spec:
           name: locustd-configmap
       containers:
         - name: locust
-          image: heehouse1/locust:0.9.6
+          image: heehouse1/locust:0.8.8
           env:
             - name: LOCUST_MODE
               value: master
             - name: LOCUST_LOCUSTFILE_PATH
               value: "/locust-tasks/locustfile.py"
             - name: LOCUST_TARGET_HOST
-              value: "http://TARGETIP"
+              value: "http://10.0.0.58:80"
           volumeMounts:
           - name: locustd-volume
             mountPath: /locust-tasks
