@@ -14,9 +14,11 @@ spec:
       - name: locustd-volume
         configMap:
           name: locustd-configmap   
+      nodeSelector:
+        locust: "true"
       containers:
         - name: locust
-          image: heehouse1/locust:0.8.8
+          image: registry.au-syd.bluemix.net/ksy-test/locust
           env:
             - name: LOCUST_MODE
               value: slave
