@@ -44,7 +44,7 @@ spec:
           name: locustd-configmap
       containers:
         - name: locust
-          image: registry.au-syd.bluemix.net/ksy-test/locust
+          image: heehouse1/locust:0.8.8
           env:
             - name: LOCUST_MODE
               value: master
