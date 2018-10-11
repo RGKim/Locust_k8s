@@ -224,7 +224,8 @@ metadata:
   namespace: sock-shop
 spec:
   rules:
-  - http:
+  - host: sockshop.skzcp.com
+    http:
       paths:
       - path: /
         backend:
