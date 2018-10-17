@@ -28,6 +28,21 @@ spec:
       nodeSelector:
         beta.kubernetes.io/os: linux
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: carts-db
+  labels:
+    name: carts-db
+  namespace: sock-shop
+spec:
+  ports:
+    # the port that this service should serve on
+  - port: 27017
+    targetPort: 27017
+  selector:
+    name: carts-db
+---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -62,6 +77,21 @@ spec:
       nodeSelector:
         beta.kubernetes.io/os: linux
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: carts
+  labels:
+    name: carts
+  namespace: sock-shop
+spec:
+  ports:
+    # the port that this service should serve on
+  - port: 80
+    targetPort: 80
+  selector:
+    name: carts
+---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -90,6 +120,21 @@ spec:
       nodeSelector:
         beta.kubernetes.io/os: linux
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: catalogue-db
+  labels:
+    name: catalogue-db
+  namespace: sock-shop
+spec:
+  ports:
+    # the port that this service should serve on
+  - port: 3306
+    targetPort: 3306
+  selector:
+    name: catalogue-db
+---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -111,6 +156,21 @@ spec:
         - containerPort: 80
       nodeSelector:
         beta.kubernetes.io/os: linux
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: catalogue
+  labels:
+    name: catalogue
+  namespace: sock-shop
+spec:
+  ports:
+    # the port that this service should serve on
+  - port: 80
+    targetPort: 80
+  selector:
+    name: catalogue
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -135,6 +195,42 @@ spec:
         - containerPort: 8079
       nodeSelector:
         beta.kubernetes.io/os: linux
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: front-end
+  labels:
+    name: front-end
+  namespace: sock-shop
+spec:
+  type: NodePort
+  ports:
+  - port: 80
+    targetPort: 8079
+    nodePort: 30001
+  selector:
+    name: front-end
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    ingress.kubernetes.io/allow-http: "true"
+    ingress.kubernetes.io/ssl-redirect: "true"
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
+  name: frontend-ingress
+  namespace: sock-shop
+spec:
+  rules:
+  - host: sockshop.skzcp.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: front-end
+          servicePort: 80
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -165,6 +261,21 @@ spec:
             medium: Memory
       nodeSelector:
         beta.kubernetes.io/os: linux
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orders-db
+  labels:
+    name: orders-db
+  namespace: sock-shop
+spec:
+  ports:
+    # the port that this service should serve on
+  - port: 27017
+    targetPort: 27017
+  selector:
+    name: orders-db
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -200,6 +311,21 @@ spec:
       nodeSelector:
         beta.kubernetes.io/os: linux
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orders
+  labels:
+    name: orders
+  namespace: sock-shop
+spec:
+  ports:
+    # the port that this service should serve on
+  - port: 80
+    targetPort: 80
+  selector:
+    name: orders
+---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -221,6 +347,21 @@ spec:
         - containerPort: 80
       nodeSelector:
         beta.kubernetes.io/os: linux
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: payment
+  labels:
+    name: payment
+  namespace: sock-shop
+spec:
+  ports:
+    # the port that this service should serve on
+  - port: 80
+    targetPort: 80
+  selector:
+    name: payment
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -244,6 +385,23 @@ spec:
       nodeSelector:
         beta.kubernetes.io/os: linux
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: queue-master
+  labels:
+    name: queue-master
+  annotations:
+    prometheus.io/path: "/prometheus"
+  namespace: sock-shop
+spec:
+  ports:
+    # the port that this service should serve on
+  - port: 80
+    targetPort: 80
+  selector:
+    name: queue-master
+---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -265,6 +423,21 @@ spec:
         - containerPort: 5672
       nodeSelector:
         beta.kubernetes.io/os: linux
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq
+  labels:
+    name: rabbitmq
+  namespace: sock-shop
+spec:
+  ports:
+    # the port that this service should serve on
+  - port: 5672
+    targetPort: 5672
+  selector:
+    name: rabbitmq
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -300,6 +473,21 @@ spec:
       nodeSelector:
         beta.kubernetes.io/os: linux
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: shipping
+  labels:
+    name: shipping
+  namespace: sock-shop
+spec:
+  ports:
+    # the port that this service should serve on
+  - port: 80
+    targetPort: 80
+  selector:
+    name: shipping
+---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -330,6 +518,21 @@ spec:
       nodeSelector:
         beta.kubernetes.io/os: linux
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-db
+  labels:
+    name: user-db
+  namespace: sock-shop
+spec:
+  ports:
+    # the port that this service should serve on
+  - port: 27017
+    targetPort: 27017
+  selector:
+    name: user-db
+---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -354,3 +557,18 @@ spec:
           value: user-db:27017
       nodeSelector:
         beta.kubernetes.io/os: linux
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user
+  labels:
+    name: user
+  namespace: sock-shop
+spec:
+  ports:
+    # the port that this service should serve on
+  - port: 80
+    targetPort: 80
+  selector:
+    name: user
